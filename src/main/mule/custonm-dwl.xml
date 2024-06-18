@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="0681a7f7-d9ed-4a4c-b736-8c3a8f9f025f" >
 		<http:listener-connection host="0.0.0.0" port="8082" />
 	</http:listener-config>
 	<flow name="custonm-dwlFlow" doc:id="86c86ea9-81e9-4f63-9c87-e5c2eded6974" >
 		<http:listener doc:name="Listener" doc:id="6b095b3c-9b33-47f3-bcdd-8b510ab766cb" config-ref="HTTP_Listener_config" path="/gittest"/>
 		<set-payload value='#[{"message": "commiteed successfully"}]' doc:name="Set Payload" doc:id="c9cb3d31-42d2-492f-a3c3-93a024128c00" />
+		<ee:transform doc:name="Transform Message" doc:id="63314981-ec96-476b-93b5-9e8dfca8c7bf" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="afaf813e-d812-4dcf-a107-f3e7b224a359" message="#[payload]"/>
 	</flow>
 </mule>
